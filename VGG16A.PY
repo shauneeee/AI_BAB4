@@ -1,0 +1,33 @@
+# Example 4.11
+# VGG16 Image Classification
+
+from tensorflow.keras.preprocessing import image
+from tensorflow.keras.applications.vgg16 import VGG16
+from tensorflow.keras.applications.vgg16 import preprocess_input
+from tensorflow.keras.applications.imagenet_utils import decode_predictions
+import numpy as np
+
+model = VGG16(weights='imagenet')
+img_path = 'Elephant.jpg'
+img = image.load_img(
+    img_path,
+    target_size=(224, 224)
+)
+
+x = image.img_to_array(img)
+x = np.expand_dims(x, axis=0)
+x = preprocess_input(x)
+predictions = model.predict(x)
+results = decode_predictions(predictions, top=5)
+
+print("\nPrediction Results:")
+
+for result in results[0]:
+    print(
+        "Class:",
+        result[1],
+        "| Description:",
+        result[0],
+        "| Probability:",
+        f"{result[2] * 100:.2f}%"
+    )
